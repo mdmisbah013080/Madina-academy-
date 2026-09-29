@@ -586,7 +586,7 @@
     </footer>
 
     <!-- FLOATING WHATSAPP BUTTON -->
-    <a href="https://wa.me/8801700000000" target="_blank" id="waFloatingBtn" class="fixed bottom-6 right-6 bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-4 py-3 rounded-full shadow-2xl flex items-center gap-2.5 z-50 transition transform hover:scale-105 border-2 border-white">
+    <a href="https://wa.me/8801308056100" target="_blank" id="waFloatingBtn" class="fixed bottom-6 right-6 bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-4 py-3 rounded-full shadow-2xl flex items-center gap-2.5 z-50 transition transform hover:scale-105 border-2 border-white">
         <i class="fa-brands fa-whatsapp text-2xl"></i>
         <span class="hidden sm:inline text-sm">হোয়াটসঅ্যাপে কথা বলুন</span>
     </a>
@@ -598,11 +598,11 @@
             <div class="text-center mb-6">
                 <div class="w-14 h-14 bg-emeraldSoft text-emeraldMain rounded-2xl mx-auto flex items-center justify-center text-2xl mb-3"><i class="fa-solid fa-lock"></i></div>
                 <h3 class="text-2xl font-extrabold text-emeraldMain">এডমিন পাসওয়ার্ড পিন</h3>
-                <p class="text-xs text-gray-500 mt-1">পাসওয়ার্ড প্রদান করে ভিজ্যুয়াল এডিটর আনলক করুন</p>
+                <p class="text-xs text-gray-500 mt-1">লগইন করলে প্রফেশনাল ম্যানেজমেন্ট ড্যাশবোর্ড খুলবে</p>
             </div>
             <div class="space-y-4">
                 <div>
-                    <label class="block text-xs font-bold text-gray-700 mb-1">পাসওয়ার্ড দিন (ডিফল্ট: admin123)</label>
+                    <label class="block text-xs font-bold text-gray-700 mb-1">অ্যাডমিন পাসওয়ার্ড দিন</label>
                     <input type="password" id="adminPasswordInput" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emeraldMain focus:outline-none" placeholder="••••••••">
                 </div>
                 <button onclick="attemptAdminLogin()" class="w-full bg-emeraldMain hover:bg-emeraldLight text-white py-3.5 rounded-xl font-bold transition shadow-md">লগইন করুন</button>
@@ -747,7 +747,7 @@
             siteTagline: "মদিনা একাডেমি • বিশ্বমানের অনলাইন কোরআন শিক্ষা প্রতিষ্ঠান",
             heroTitle: "সহীহ নিয়মে ঘরে বসেই শিখুন পবিত্র কোরআন ও দ্বীনি ইলম",
             heroSub: "দেশ ও বিদেশের অভিজ্ঞ হাফেজ ও সার্টিফাইড ক্বারী দ্বারা পরিচালিত নারী, পুরুষ ও শিশুদের জন্য বিশেষ অনলাইন কোরআন শিখন একাডেমি। আপনার সুবিধাজনক সময়ে শিখুন তাজবীদ, কিরাত ও মাসআলা।",
-            contactWa: "+8801700000000"
+            contactWa: "+8801308056100"
         };
 
         const defaultCourses = [
@@ -929,9 +929,11 @@
                 localStorage.setItem('madina_v_admin_active', 'true');
                 enableAdminMode();
                 closeLoginModal();
-                showToast("স্বাগতম! লাইভ ভিজ্যুয়াল এডমিন মোড সক্রিয় হয়েছে।");
+                document.getElementById('adminPasswordInput').value = '';
+                showToast("অ্যাডমিন লগইন সফল। ম্যানেজমেন্ট ড্যাশবোর্ড খোলা হচ্ছে...");
+                setTimeout(() => openManagementSoftware(), 250);
             } else {
-                alert("ভুল পাসওয়ার্ড! পাসওয়ার্ড admin123 চেষ্টা করুন।");
+                alert("ভুল পাসওয়ার্ড।");
             }
         }
 
@@ -939,6 +941,7 @@
             if (localStorage.getItem('madina_v_admin_active') === 'true') {
                 isAdminLoggedIn = true;
                 enableAdminMode();
+                setTimeout(() => openManagementSoftware(), 250);
             }
         }
 
@@ -960,6 +963,8 @@
             isAdminLoggedIn = false;
             localStorage.removeItem('madina_v_admin_active');
             document.body.classList.remove('admin-active');
+            const mgmtModal = document.getElementById('managementSoftwareModal');
+            if (mgmtModal) mgmtModal.classList.add('hidden');
             document.getElementById('adminLoginBtn').style.display = 'flex';
 
             document.querySelectorAll('[data-editable="text"]').forEach(el => {
@@ -1014,8 +1019,8 @@
         }
 
         function resetToDefaults() {
-            if (confirm("আপনি কি সমস্ত তথ্য আগের ডিফল্ট অবস্থায় ফিরিয়ে নিতে চান?")) {
-                localStorage.clear();
+            if (confirm("আপনি কি ভিজিটর সাইটের কনটেন্ট ও ভিজ্যুয়াল পরিবর্তনগুলো ডিফল্ট অবস্থায় ফিরিয়ে নিতে চান? ম্যানেজমেন্টের স্টুডেন্ট/ট্রায়াল ডাটা মুছে যাবে না।")) {
+                ['madina_v_texts','madina_v_images','madina_v_courses','madina_v_teachers','madina_v_videos'].forEach(k => localStorage.removeItem(k));
                 location.reload();
             }
         }
@@ -1026,6 +1031,21 @@
 
         function handleTrialSubmit(e) {
             e.preventDefault();
+            const request = {
+                name: document.getElementById('tStudentName').value.trim(),
+                father: "নির্ধারিত নয়",
+                phone: document.getElementById('tStudentPhone').value.trim(),
+                course: document.getElementById('tStudentCourse').value,
+                time: document.getElementById('tStudentTime').value,
+                status: "pending",
+                createdAt: new Date().toISOString()
+            };
+            if (!request.name || !request.phone) return;
+            const existing = JSON.parse(localStorage.getItem('m_trials') || '[]');
+            existing.push(request);
+            localStorage.setItem('m_trials', JSON.stringify(existing));
+            if (typeof mgmtTrialRequests !== 'undefined') mgmtTrialRequests = existing;
+            document.getElementById('trialForm').reset();
             alert("ধন্যবাদ! আপনার ফ্রি ট্রায়াল ক্লাসের আবেদন জমা নেওয়া হয়েছে। খুব শীঘ্রই আমাদের প্রতিনিধি যোগাযোগ করবেন।");
             closeTrialModal();
         }
@@ -1146,5 +1166,350 @@
         // START ON LOAD
         window.onload = initApp;
     </script>
+
+<!-- ==========================================================
+     PROFESSIONAL ADMIN MANAGEMENT SYSTEM
+     Integrated into the existing Madina Academy visitor site.
+     ========================================================== -->
+
+<style>
+    #managementSoftwareModal .mgmt-shell{font-family:'Hind Siliguri','Plus Jakarta Sans',sans-serif}
+    #managementSoftwareModal .mgmt-scroll{scrollbar-width:thin}
+    .mgmt-stat{transition:transform .2s ease,box-shadow .2s ease}
+    .mgmt-stat:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(15,23,42,.08)}
+    .mgmt-editing [data-mgmt-editable="text"]{outline:2px dashed #f59e0b;outline-offset:4px;cursor:text;background:rgba(245,158,11,.08)}
+    .mgmt-nav-btn.active{background:#064e3b!important;color:#fff!important;box-shadow:0 6px 16px rgba(6,78,59,.18)}
+</style>
+
+<div id="managementSoftwareModal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-[100001] hidden items-center justify-center p-2 sm:p-5">
+  <div class="mgmt-shell bg-[#f8fafc] rounded-[28px] max-w-[1450px] w-full h-[96vh] overflow-hidden shadow-2xl flex flex-col">
+
+    <div class="bg-white border-b px-4 sm:px-6 py-3 flex items-center justify-between gap-3">
+      <div class="flex items-center gap-3 min-w-0">
+        <div class="w-11 h-11 rounded-2xl bg-emerald-900 text-amber-300 flex items-center justify-center shadow">
+          <i class="fa-solid fa-chart-pie"></i>
+        </div>
+        <div class="min-w-0">
+          <h2 data-mgmt-editable="text" data-mgmt-key="title" class="font-extrabold text-emerald-950 text-base sm:text-xl truncate">মদিনা একাডেমি ম্যানেজমেন্ট সফটওয়্যার</h2>
+          <p data-mgmt-editable="text" data-mgmt-key="subtitle" class="text-[11px] sm:text-xs text-slate-500 truncate">সেন্ট্রাল স্টুডেন্ট ডাটাবেজ ও একাডেমি কন্ট্রোল প্যানেল</p>
+        </div>
+      </div>
+
+      <div class="relative flex items-center gap-2">
+        <span id="mgmtLiveBadge" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-100 text-[11px] font-bold">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> অ্যাডমিন সেশন সক্রিয়
+        </span>
+        <button onclick="toggleMgmtMenu()" class="w-10 h-10 rounded-xl border bg-white hover:bg-slate-50 text-slate-700 flex items-center justify-center">
+          <i class="fa-solid fa-ellipsis-vertical"></i>
+        </button>
+        <div id="mgmtMenu" class="hidden absolute right-0 top-12 w-64 bg-white border rounded-2xl shadow-2xl z-[10020] py-2">
+          <div class="px-4 py-2 text-[10px] uppercase tracking-widest text-slate-400 font-bold">কন্ট্রোল</div>
+          <button onclick="toggleManagementEditMode();toggleMgmtMenu();" class="w-full text-left px-4 py-3 text-sm hover:bg-amber-50 flex gap-3 items-center">
+            <i class="fa-solid fa-pen-to-square text-amber-600 w-4"></i><span id="mgmtMenuEditText">ম্যানেজমেন্ট সফটওয়্যার এডিট</span>
+          </button>
+          <button onclick="closeManagementSoftware(); enableAdminMode(); toggleMgmtMenu();" class="w-full text-left px-4 py-3 text-sm hover:bg-emerald-50 flex gap-3 items-center">
+            <i class="fa-solid fa-globe text-emerald-700 w-4"></i> ভিজিটর সাইট এডিট করুন
+          </button>
+          <button onclick="closeManagementSoftware(); toggleMgmtMenu();" class="w-full text-left px-4 py-3 text-sm hover:bg-slate-50 flex gap-3 items-center">
+            <i class="fa-solid fa-eye text-slate-600 w-4"></i> ভিজিটর সাইট দেখুন
+          </button>
+          <div class="my-1 border-t"></div>
+          <button onclick="saveManagementSettings();toggleMgmtMenu();" class="w-full text-left px-4 py-3 text-sm hover:bg-emerald-50 flex gap-3 items-center">
+            <i class="fa-solid fa-floppy-disk text-emerald-700 w-4"></i> ম্যানেজমেন্ট পরিবর্তন সেভ
+          </button>
+          <button onclick="logoutAdmin();closeManagementSoftware();toggleMgmtMenu();" class="w-full text-left px-4 py-3 text-sm hover:bg-rose-50 text-rose-700 flex gap-3 items-center">
+            <i class="fa-solid fa-right-from-bracket w-4"></i> নিরাপদে লগআউট
+          </button>
+        </div>
+        <button onclick="closeManagementSoftware()" class="w-10 h-10 rounded-xl hover:bg-slate-100 text-slate-400 text-2xl">&times;</button>
+      </div>
+    </div>
+
+    <div class="flex-1 min-h-0 flex flex-col lg:flex-row">
+      <aside class="w-full lg:w-64 bg-white border-b lg:border-b-0 lg:border-r p-3 sm:p-4 overflow-x-auto lg:overflow-y-auto">
+        <div class="flex lg:flex-col gap-2 min-w-max lg:min-w-0">
+          <button onclick="switchMgmtTab('mgmtOverview')" id="btnMgmtOverview" class="mgmt-nav-btn active px-4 py-3 rounded-xl text-left text-xs font-bold bg-emerald-800 text-white whitespace-nowrap"><i class="fa-solid fa-gauge-high w-5"></i> ওভারভিউ</button>
+          <button onclick="switchMgmtTab('mgmtTrials')" id="btnMgmtTrials" class="mgmt-nav-btn px-4 py-3 rounded-xl text-left text-xs font-bold bg-slate-50 text-slate-700 whitespace-nowrap"><i class="fa-solid fa-user-clock w-5"></i> ট্রায়াল আবেদন <span id="mgmtTrialCount" class="ml-1 inline-flex min-w-5 h-5 px-1 rounded-full bg-amber-100 text-amber-800 items-center justify-center text-[10px]">0</span></button>
+          <button onclick="switchMgmtTab('mgmtStudents')" id="btnMgmtStudents" class="mgmt-nav-btn px-4 py-3 rounded-xl text-left text-xs font-bold bg-slate-50 text-slate-700 whitespace-nowrap"><i class="fa-solid fa-user-graduate w-5"></i> স্টুডেন্ট <span id="mgmtStudentCount" class="ml-1 inline-flex min-w-5 h-5 px-1 rounded-full bg-emerald-100 text-emerald-800 items-center justify-center text-[10px]">0</span></button>
+          <button onclick="switchMgmtTab('mgmtCategories')" id="btnMgmtCategories" class="mgmt-nav-btn px-4 py-3 rounded-xl text-left text-xs font-bold bg-slate-50 text-slate-700 whitespace-nowrap"><i class="fa-solid fa-layer-group w-5"></i> কোর্স ক্যাটাগরি</button>
+          <div class="hidden lg:block border-t my-2"></div>
+          <button onclick="openAddCourseModal();closeManagementSoftware();" class="px-4 py-3 rounded-xl text-left text-xs font-bold bg-indigo-50 text-indigo-700 whitespace-nowrap"><i class="fa-solid fa-book-medical w-5"></i> নতুন কোর্স</button>
+          <button onclick="openAddTeacherModal();closeManagementSoftware();" class="px-4 py-3 rounded-xl text-left text-xs font-bold bg-purple-50 text-purple-700 whitespace-nowrap"><i class="fa-solid fa-user-plus w-5"></i> নতুন শিক্ষক</button>
+        </div>
+        <div class="hidden lg:block mt-6 p-4 rounded-2xl bg-emerald-950 text-white">
+          <div class="text-[10px] uppercase tracking-widest text-emerald-300 font-bold mb-2">Secure workflow</div>
+          <p class="text-xs text-emerald-100 leading-relaxed">ট্রায়াল আবেদন যাচাই → অনুমোদন → স্টুডেন্ট ডাটাবেজ → কোর্সভিত্তিক হিসাব।</p>
+        </div>
+      </aside>
+
+      <main class="flex-1 min-w-0 overflow-y-auto p-4 sm:p-6 lg:p-7 mgmt-scroll">
+        <!-- OVERVIEW -->
+        <section id="mgmtOverview" class="mgmt-tab-content space-y-6">
+          <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
+            <div>
+              <div data-mgmt-editable="text" data-mgmt-key="welcome" class="text-xs font-bold text-amber-600 mb-1">ACADEMY CONTROL CENTER</div>
+              <h3 data-mgmt-editable="text" data-mgmt-key="overviewTitle" class="text-2xl sm:text-3xl font-extrabold text-slate-900">আজকের একাডেমি পরিস্থিতি</h3>
+              <p data-mgmt-editable="text" data-mgmt-key="overviewDesc" class="text-sm text-slate-500 mt-1">গুরুত্বপূর্ণ আবেদন, শিক্ষার্থী ও কোর্সের অবস্থা এক নজরে দেখুন।</p>
+            </div>
+            <button onclick="renderMgmtDashboardData();showToast('ড্যাশবোর্ড আপডেট হয়েছে।')" class="px-4 py-2.5 rounded-xl bg-white border text-xs font-bold text-slate-700 hover:bg-slate-50"><i class="fa-solid fa-arrows-rotate mr-1"></i> রিফ্রেশ</button>
+          </div>
+
+          <div class="grid grid-cols-2 xl:grid-cols-6 gap-3 sm:gap-4">
+            <div class="mgmt-stat p-4 bg-white rounded-2xl border"><div id="mStatTotalActive" class="text-2xl font-extrabold text-emerald-800">0</div><div class="text-[11px] font-bold text-slate-500 mt-1">সক্রিয় স্টুডেন্ট</div></div>
+            <div class="mgmt-stat p-4 bg-white rounded-2xl border"><div id="mStatPendingTrials" class="text-2xl font-extrabold text-amber-600">0</div><div class="text-[11px] font-bold text-slate-500 mt-1">পেন্ডিং ট্রায়াল</div></div>
+            <div class="mgmt-stat p-4 bg-white rounded-2xl border"><div id="mStatTodayTrials" class="text-2xl font-extrabold text-blue-600">0</div><div class="text-[11px] font-bold text-slate-500 mt-1">আজকের আবেদন</div></div>
+            <div class="mgmt-stat p-4 bg-white rounded-2xl border"><div id="mStatTotalCourses" class="text-2xl font-extrabold text-indigo-600">0</div><div class="text-[11px] font-bold text-slate-500 mt-1">সচল কোর্স</div></div>
+            <div class="mgmt-stat p-4 bg-white rounded-2xl border"><div id="mStatTotalTeachers" class="text-2xl font-extrabold text-purple-600">0</div><div class="text-[11px] font-bold text-slate-500 mt-1">শিক্ষক</div></div>
+            <div class="mgmt-stat p-4 bg-white rounded-2xl border"><div id="mStatPassedOut" class="text-2xl font-extrabold text-rose-600">0</div><div class="text-[11px] font-bold text-slate-500 mt-1">পাস/সম্পন্ন</div></div>
+          </div>
+
+          <div class="grid grid-cols-1 xl:grid-cols-3 gap-5">
+            <div class="xl:col-span-2 bg-white border rounded-3xl p-5">
+              <div class="flex items-center justify-between mb-4"><h4 class="font-extrabold text-slate-800 text-sm">সাম্প্রতিক ট্রায়াল আবেদন</h4><button onclick="switchMgmtTab('mgmtTrials')" class="text-xs font-bold text-emerald-700">সব দেখুন →</button></div>
+              <div id="mgmtRecentTrials" class="space-y-2"></div>
+            </div>
+            <div class="bg-emerald-950 text-white rounded-3xl p-5">
+              <h4 class="font-extrabold text-sm text-amber-300 mb-3">কাজের ধাপ</h4>
+              <div class="space-y-3 text-xs text-emerald-100">
+                <div class="flex gap-3"><span class="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center">১</span><span>নতুন ট্রায়াল আবেদন দেখুন</span></div>
+                <div class="flex gap-3"><span class="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center">২</span><span>তথ্য যাচাই করে এপ্রুভ করুন</span></div>
+                <div class="flex gap-3"><span class="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center">৩</span><span>স্টুডেন্ট ডাটাবেজে যুক্ত হবে</span></div>
+                <div class="flex gap-3"><span class="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center">৪</span><span>ভিজিটর সাইট আলাদা করে এডিট করুন</span></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- TRIALS -->
+        <section id="mgmtTrials" class="mgmt-tab-content hidden space-y-4">
+          <div class="flex flex-col sm:flex-row gap-3 justify-between sm:items-center">
+            <div><h3 class="text-xl font-extrabold text-slate-900">ট্রায়াল ক্লাস আবেদন</h3><p class="text-xs text-slate-500">ওয়েবসাইট থেকে আসা নতুন আবেদনগুলো এখানে জমা হবে।</p></div>
+            <div class="relative"><i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i><input id="mgmtTrialSearch" oninput="renderMgmtDashboardData()" class="pl-8 pr-3 py-2.5 border rounded-xl text-xs w-full sm:w-64" placeholder="নাম/নম্বর/কোর্স খুঁজুন"></div>
+          </div>
+          <div id="mgmtTrialListContainer" class="space-y-3"></div>
+        </section>
+
+        <!-- STUDENTS -->
+        <section id="mgmtStudents" class="mgmt-tab-content hidden space-y-4">
+          <div class="flex flex-col sm:flex-row gap-3 justify-between sm:items-center">
+            <div><h3 class="text-xl font-extrabold text-slate-900">স্টুডেন্ট ডাটাবেজ</h3><p class="text-xs text-slate-500">অনুমোদিত ও ম্যানুয়ালি ভর্তি করা শিক্ষার্থীদের তালিকা।</p></div>
+            <div class="flex gap-2">
+              <input id="mgmtStudentSearch" oninput="renderMgmtDashboardData()" class="px-3 py-2.5 border rounded-xl text-xs w-44 sm:w-60" placeholder="স্টুডেন্ট খুঁজুন">
+              <button onclick="openManualStudentModal()" class="px-3 py-2.5 bg-emerald-800 text-white rounded-xl text-xs font-bold"><i class="fa-solid fa-user-plus mr-1"></i> ভর্তি</button>
+            </div>
+          </div>
+          <div class="bg-white border rounded-2xl overflow-x-auto">
+            <table class="w-full min-w-[760px] text-xs">
+              <thead><tr class="bg-slate-50 border-b text-slate-600"><th class="p-3 text-left">নাম</th><th class="p-3 text-left">পিতার নাম</th><th class="p-3 text-left">মোবাইল / WhatsApp</th><th class="p-3 text-left">কোর্স</th><th class="p-3 text-left">শিফট</th><th class="p-3 text-right">অ্যাকশন</th></tr></thead>
+              <tbody id="mgmtStudentTableBody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- CATEGORIES -->
+        <section id="mgmtCategories" class="mgmt-tab-content hidden space-y-4">
+          <div><h3 class="text-xl font-extrabold text-slate-900">কোর্সভিত্তিক ক্যাটাগরি</h3><p class="text-xs text-slate-500">কোন কোর্সে কতজন শিক্ষার্থী আছে, এক নজরে।</p></div>
+          <div id="mgmtCategoryCardsContainer" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4"></div>
+        </section>
+      </main>
+    </div>
+  </div>
+</div>
+
+<div id="manualStudentModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-[100005] hidden items-center justify-center p-4">
+  <div class="bg-white rounded-3xl max-w-md w-full p-6 relative shadow-2xl">
+    <button onclick="closeManualStudentModal()" class="absolute top-4 right-4 text-slate-400 text-xl">&times;</button>
+    <h3 class="text-lg font-extrabold text-emerald-900 mb-1">নতুন স্টুডেন্ট ভর্তি</h3>
+    <p class="text-xs text-slate-500 mb-4">ম্যানুয়ালি ডাটাবেজে যুক্ত করুন।</p>
+    <div class="space-y-3 text-xs">
+      <input type="text" id="msName" class="w-full p-3 border rounded-xl" placeholder="শিক্ষার্থীর নাম *">
+      <input type="text" id="msFather" class="w-full p-3 border rounded-xl" placeholder="পিতার নাম">
+      <input type="tel" id="msPhone" class="w-full p-3 border rounded-xl" placeholder="মোবাইল/WhatsApp নম্বর *">
+      <select id="msCourse" class="w-full p-3 border rounded-xl bg-white">
+        <option>01. কোরআন কায়দা ও নূরানী পাঠ</option>
+        <option>02. সহীহ তাজবীদ ও ক্বিরাত কোর্স</option>
+        <option>03. হিফজুল কোরআন ও রিভিশন</option>
+        <option>04. শিশুদের জন্য ইসলামিক স্টাডিজ</option>
+      </select>
+      <select id="msTime" class="w-full p-3 border rounded-xl bg-white">
+        <option>সকাল (৮:০০ - ১২:০০)</option><option>বিকাল (৪:০০ - ৭:০০)</option><option>রাত (৮:০০ - ১১:০০)</option>
+      </select>
+      <button onclick="saveManualStudentData()" class="w-full bg-emerald-900 text-white py-3 rounded-xl font-bold">ডাটাবেজে সংরক্ষণ করুন</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let mgmtTrialRequests = JSON.parse(localStorage.getItem('m_trials') || '[]');
+let mgmtApprovedStudents = JSON.parse(localStorage.getItem('m_students') || '[]');
+let isMgmtEditModeActive = false;
+
+const defaultMgmtTexts = {
+  title:"মদিনা একাডেমি ম্যানেজমেন্ট সফটওয়্যার",
+  subtitle:"সেন্ট্রাল স্টুডেন্ট ডাটাবেজ ও একাডেমি কন্ট্রোল প্যানেল",
+  welcome:"ACADEMY CONTROL CENTER",
+  overviewTitle:"আজকের একাডেমি পরিস্থিতি",
+  overviewDesc:"গুরুত্বপূর্ণ আবেদন, শিক্ষার্থী ও কোর্সের অবস্থা এক নজরে দেখুন।"
+};
+let mgmtTexts = JSON.parse(localStorage.getItem('madina_mgmt_texts') || 'null') || {...defaultMgmtTexts};
+
+function applyMgmtTexts(){
+  document.querySelectorAll('[data-mgmt-editable="text"]').forEach(el=>{
+    const key=el.dataset.mgmtKey;
+    if(key && mgmtTexts[key]!==undefined) el.innerText=mgmtTexts[key];
+  });
+}
+function toggleMgmtMenu(){ document.getElementById('mgmtMenu').classList.toggle('hidden'); }
+
+function openManagementSoftware(){
+  if(!isAdminLoggedIn){ openLoginModal(); return; }
+  applyMgmtTexts();
+  renderMgmtDashboardData();
+  document.getElementById('managementSoftwareModal').classList.remove('hidden');
+  document.getElementById('managementSoftwareModal').classList.add('flex');
+}
+function closeManagementSoftware(){
+  document.getElementById('managementSoftwareModal').classList.add('hidden');
+  document.getElementById('mgmtMenu').classList.add('hidden');
+}
+function switchMgmtTab(tabId){
+  document.querySelectorAll('.mgmt-tab-content').forEach(el=>el.classList.add('hidden'));
+  document.getElementById(tabId).classList.remove('hidden');
+  document.querySelectorAll('.mgmt-nav-btn').forEach(el=>el.classList.remove('active'));
+  const btn=document.getElementById('btn'+tabId.charAt(0).toUpperCase()+tabId.slice(1));
+  if(btn) btn.classList.add('active');
+  renderMgmtDashboardData();
+}
+function toggleManagementEditMode(){
+  isMgmtEditModeActive=!isMgmtEditModeActive;
+  document.getElementById('managementSoftwareModal').classList.toggle('mgmt-editing',isMgmtEditModeActive);
+  document.querySelectorAll('[data-mgmt-editable="text"]').forEach(el=>el.contentEditable=isMgmtEditModeActive ? 'true':'false');
+  document.getElementById('mgmtMenuEditText').innerText=isMgmtEditModeActive?'ম্যানেজমেন্ট এডিট বন্ধ করুন':'ম্যানেজমেন্ট সফটওয়্যার এডিট';
+  if(!isMgmtEditModeActive) saveManagementSettings(false);
+}
+function saveManagementSettings(show=true){
+  document.querySelectorAll('[data-mgmt-editable="text"]').forEach(el=>{
+    const key=el.dataset.mgmtKey;
+    if(key) mgmtTexts[key]=el.innerText.trim();
+  });
+  localStorage.setItem('madina_mgmt_texts',JSON.stringify(mgmtTexts));
+  if(show) showToast('ম্যানেজমেন্ট সফটওয়্যারের পরিবর্তন সেভ হয়েছে।');
+}
+function mgmtEscape(v){
+  return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+}
+function mgmtIsToday(ts){
+  if(!ts) return false;
+  const d=new Date(ts), n=new Date();
+  return d.toDateString()===n.toDateString();
+}
+function renderMgmtDashboardData(){
+  const students=Array.isArray(mgmtApprovedStudents)?mgmtApprovedStudents:[];
+  const trials=Array.isArray(mgmtTrialRequests)?mgmtTrialRequests:[];
+  document.getElementById('mgmtStudentCount').innerText=students.length;
+  document.getElementById('mgmtTrialCount').innerText=trials.length;
+  document.getElementById('mStatTotalActive').innerText=students.length;
+  document.getElementById('mStatPendingTrials').innerText=trials.length;
+  document.getElementById('mStatTodayTrials').innerText=trials.filter(t=>mgmtIsToday(t.createdAt)).length;
+  document.getElementById('mStatTotalCourses').innerText=Array.isArray(siteCourses)?siteCourses.length:0;
+  document.getElementById('mStatTotalTeachers').innerText=Array.isArray(siteTeachers)?siteTeachers.length:0;
+  document.getElementById('mStatPassedOut').innerText=students.filter(s=>s.status==='completed').length;
+
+  const recent=document.getElementById('mgmtRecentTrials');
+  recent.innerHTML=trials.length ? trials.slice().reverse().slice(0,5).map((t,i)=>`
+    <div class="p-3 rounded-xl bg-slate-50 border flex items-center justify-between gap-3">
+      <div class="min-w-0"><div class="font-bold text-xs truncate">${mgmtEscape(t.name)}</div><div class="text-[10px] text-slate-500 truncate">${mgmtEscape(t.course||'')} • ${mgmtEscape(t.phone||'')}</div></div>
+      <button onclick="switchMgmtTab('mgmtTrials')" class="text-[10px] font-bold text-emerald-700 whitespace-nowrap">দেখুন</button>
+    </div>`).join('') : '<div class="p-8 text-center text-xs text-slate-400 border border-dashed rounded-2xl">এখনও কোনো ট্রায়াল আবেদন নেই।</div>';
+
+  const q=(document.getElementById('mgmtTrialSearch')?.value||'').toLowerCase().trim();
+  const filteredTrials=trials.filter(t=>`${t.name||''} ${t.phone||''} ${t.course||''}`.toLowerCase().includes(q));
+  const tl=document.getElementById('mgmtTrialListContainer');
+  tl.innerHTML=filteredTrials.length ? filteredTrials.slice().reverse().map(t=>{
+    const idx=trials.indexOf(t);
+    return `<div class="p-4 bg-white border rounded-2xl shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+      <div class="min-w-0"><div class="font-extrabold text-sm text-slate-900">${mgmtEscape(t.name)}</div>
+      <div class="text-xs text-slate-500 mt-1">${t.phone?`<a class="text-emerald-700 font-bold" href="tel:${mgmtEscape(t.phone)}">${mgmtEscape(t.phone)}</a>`:''} ${t.course?` • ${mgmtEscape(t.course)}`:''} ${t.time?` • ${mgmtEscape(t.time)}`:''}</div>
+      <div class="text-[10px] text-slate-400 mt-1">${t.createdAt?new Date(t.createdAt).toLocaleString('bn-BD'):''}</div></div>
+      <div class="flex gap-2 shrink-0"><button onclick="approveMgmtTrial(${idx})" class="bg-emerald-700 text-white px-3.5 py-2 rounded-xl text-xs font-bold"><i class="fa-solid fa-check mr-1"></i> এপ্রুভ</button><button onclick="rejectMgmtTrial(${idx})" class="bg-rose-50 text-rose-700 px-3.5 py-2 rounded-xl text-xs font-bold">বাতিল</button></div>
+    </div>`;
+  }).join('') : '<div class="p-10 text-center text-sm text-slate-400 border border-dashed rounded-2xl">কোনো মিল পাওয়া যায়নি।</div>';
+
+  const sq=(document.getElementById('mgmtStudentSearch')?.value||'').toLowerCase().trim();
+  const filteredStudents=students.filter(s=>`${s.name||''} ${s.phone||''} ${s.course||''}`.toLowerCase().includes(sq));
+  const sb=document.getElementById('mgmtStudentTableBody');
+  sb.innerHTML=filteredStudents.length ? filteredStudents.map(s=>{
+    const idx=students.indexOf(s);
+    const action=isMgmtEditModeActive?`<button onclick="editMgmtStudent(${idx})" class="text-indigo-700 font-bold mr-2">এডিট</button><button onclick="deleteMgmtStudent(${idx})" class="text-rose-700 font-bold">ডিলিট</button>`:`<span class="text-slate-400 text-[10px]">লকড</span>`;
+    return `<tr class="border-b last:border-0 hover:bg-slate-50"><td class="p-3 font-bold">${mgmtEscape(s.name)}</td><td class="p-3 text-slate-600">${mgmtEscape(s.father||'নির্ধারিত নয়')}</td><td class="p-3 font-semibold text-emerald-800">${mgmtEscape(s.phone||'')}</td><td class="p-3">${mgmtEscape(s.course||'')}</td><td class="p-3 text-slate-500">${mgmtEscape(s.time||'')}</td><td class="p-3 text-right">${action}</td></tr>`;
+  }).join('') : '<tr><td colspan="6" class="p-8 text-center text-slate-400">কোনো স্টুডেন্ট পাওয়া যায়নি।</td></tr>';
+
+  const categories=[
+    ['কোরআন কায়দা ও নূরানী পাঠ','কায়দা','emerald'],
+    ['সহীহ তাজবীদ ও ক্বিরাত কোর্স','তাজবীদ','amber'],
+    ['হিফজুল কোরআন ও রিভিশন','হিফজ','indigo'],
+    ['শিশুদের জন্য ইসলামিক স্টাডিজ','ইসলামিক স্টাডিজ','purple']
+  ];
+  document.getElementById('mgmtCategoryCardsContainer').innerHTML=categories.map(c=>{
+    const count=students.filter(s=>(s.course||'').includes(c[1])).length;
+    return `<div class="bg-white border rounded-2xl p-5"><div class="text-xs font-bold text-slate-500">${c[0]}</div><div class="text-3xl font-extrabold mt-2 text-slate-900">${count}</div><div class="text-[10px] text-slate-400 mt-1">জন শিক্ষার্থী</div></div>`;
+  }).join('');
+}
+function approveMgmtTrial(idx){
+  const t=mgmtTrialRequests[idx];
+  if(!t) return;
+  const student={...t,status:'active',approvedAt:new Date().toISOString()};
+  mgmtApprovedStudents.push(student);
+  mgmtTrialRequests.splice(idx,1);
+  localStorage.setItem('m_students',JSON.stringify(mgmtApprovedStudents));
+  localStorage.setItem('m_trials',JSON.stringify(mgmtTrialRequests));
+  renderMgmtDashboardData();
+  showToast('আবেদন অনুমোদিত হয়ে স্টুডেন্ট ডাটাবেজে যুক্ত হয়েছে।');
+}
+function rejectMgmtTrial(idx){
+  if(!mgmtTrialRequests[idx]) return;
+  mgmtTrialRequests.splice(idx,1);
+  localStorage.setItem('m_trials',JSON.stringify(mgmtTrialRequests));
+  renderMgmtDashboardData();
+  showToast('ট্রায়াল আবেদন বাতিল করা হয়েছে।');
+}
+function deleteMgmtStudent(idx){
+  if(!isMgmtEditModeActive) return;
+  if(!confirm('এই স্টুডেন্টকে ডাটাবেজ থেকে মুছে ফেলবেন?')) return;
+  mgmtApprovedStudents.splice(idx,1);
+  localStorage.setItem('m_students',JSON.stringify(mgmtApprovedStudents));
+  renderMgmtDashboardData();
+}
+function editMgmtStudent(idx){
+  if(!isMgmtEditModeActive) return;
+  const s=mgmtApprovedStudents[idx]; if(!s) return;
+  const name=prompt('শিক্ষার্থীর নাম',s.name||''); if(name===null) return;
+  const phone=prompt('মোবাইল/WhatsApp নম্বর',s.phone||''); if(phone===null) return;
+  mgmtApprovedStudents[idx]={...s,name,phone};
+  localStorage.setItem('m_students',JSON.stringify(mgmtApprovedStudents));
+  renderMgmtDashboardData();
+}
+function openManualStudentModal(){
+  document.getElementById('manualStudentModal').classList.remove('hidden');
+  document.getElementById('manualStudentModal').classList.add('flex');
+}
+function closeManualStudentModal(){document.getElementById('manualStudentModal').classList.add('hidden');}
+function saveManualStudentData(){
+  const s={name:document.getElementById('msName').value.trim(),father:document.getElementById('msFather').value.trim(),phone:document.getElementById('msPhone').value.trim(),course:document.getElementById('msCourse').value,time:document.getElementById('msTime').value,status:'active',createdAt:new Date().toISOString()};
+  if(!s.name||!s.phone) return alert('শিক্ষার্থীর নাম ও ফোন নম্বর বাধ্যতামূলক।');
+  mgmtApprovedStudents.push(s);
+  localStorage.setItem('m_students',JSON.stringify(mgmtApprovedStudents));
+  ['msName','msFather','msPhone'].forEach(id=>document.getElementById(id).value='');
+  closeManualStudentModal();renderMgmtDashboardData();showToast('নতুন স্টুডেন্ট সফলভাবে যুক্ত হয়েছে।');
+}
+
+// Close management menu when clicking elsewhere
+document.addEventListener('click',e=>{
+  const menu=document.getElementById('mgmtMenu');
+  if(menu && !e.target.closest('#mgmtMenu') && !e.target.closest('button[onclick="toggleMgmtMenu()"]')) menu.classList.add('hidden');
+});
+applyMgmtTexts();
+</script>
+
 </body>
 </html>
