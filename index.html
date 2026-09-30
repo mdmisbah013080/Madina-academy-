@@ -586,7 +586,7 @@
     </footer>
 
     <!-- FLOATING WHATSAPP BUTTON -->
-    <a href="https://wa.me/8801308056100" target="_blank" id="waFloatingBtn" class="fixed bottom-6 right-6 bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-4 py-3 rounded-full shadow-2xl flex items-center gap-2.5 z-50 transition transform hover:scale-105 border-2 border-white">
+    <a href="https://wa.me/8801700000000" target="_blank" id="waFloatingBtn" class="fixed bottom-6 right-6 bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-4 py-3 rounded-full shadow-2xl flex items-center gap-2.5 z-50 transition transform hover:scale-105 border-2 border-white">
         <i class="fa-brands fa-whatsapp text-2xl"></i>
         <span class="hidden sm:inline text-sm">হোয়াটসঅ্যাপে কথা বলুন</span>
     </a>
@@ -747,7 +747,7 @@
             siteTagline: "মদিনা একাডেমি • বিশ্বমানের অনলাইন কোরআন শিক্ষা প্রতিষ্ঠান",
             heroTitle: "সহীহ নিয়মে ঘরে বসেই শিখুন পবিত্র কোরআন ও দ্বীনি ইলম",
             heroSub: "দেশ ও বিদেশের অভিজ্ঞ হাফেজ ও সার্টিফাইড ক্বারী দ্বারা পরিচালিত নারী, পুরুষ ও শিশুদের জন্য বিশেষ অনলাইন কোরআন শিখন একাডেমি। আপনার সুবিধাজনক সময়ে শিখুন তাজবীদ, কিরাত ও মাসআলা।",
-            contactWa: "+8801308056100"
+            contactWa: "+8801700000000"
         };
 
         const defaultCourses = [
@@ -1511,5 +1511,150 @@ document.addEventListener('click',e=>{
 applyMgmtTexts();
 </script>
 
+
+<style>
+  .pro-mgmt-card{background:#fff;border:1px solid #e2e8f0;border-radius:22px;box-shadow:0 8px 28px rgba(15,23,42,.04)}
+  .pro-input{width:100%;padding:.72rem .85rem;border:1px solid #cbd5e1;border-radius:12px;font-size:.78rem;outline:none;background:#fff}
+  .pro-input:focus{border-color:#047857;box-shadow:0 0 0 3px rgba(4,120,87,.08)}
+  .pro-chip{display:inline-flex;align-items:center;gap:.35rem;padding:.32rem .65rem;border-radius:999px;font-size:.68rem;font-weight:800}
+  .pro-table{width:100%;border-collapse:collapse;font-size:.72rem}
+  .pro-table th{background:#f8fafc;color:#64748b;font-weight:800;text-align:left;padding:.8rem;border-bottom:1px solid #e2e8f0;white-space:nowrap}
+  .pro-table td{padding:.75rem;border-bottom:1px solid #f1f5f9;vertical-align:middle}
+  .pro-kpi{border-radius:18px;padding:1rem;background:#fff;border:1px solid #e2e8f0}
+  .pro-kpi .num{font-size:1.55rem;font-weight:900;color:#0f172a}
+  .pro-kpi .lbl{font-size:.67rem;color:#64748b;font-weight:800;margin-top:.2rem}
+  .portal-preview{background:linear-gradient(135deg,#ecfdf5,#f8fafc);border:1px solid #d1fae5;border-radius:22px;padding:18px}
+</style>
+
+<script>
+/* ===== Professional Academy Modules ===== */
+(function(){
+  if(window.__madinaProModulesLoaded) return;
+  window.__madinaProModulesLoaded=true;
+  const side=document.querySelector('#managementSoftwareModal aside .flex.lg\\:flex-col');
+  const main=document.querySelector('#managementSoftwareModal main');
+  if(!side || !main) return;
+
+  side.insertAdjacentHTML('beforeend', `
+    <div class="hidden lg:block border-t my-2"></div>
+    <button onclick="switchMgmtTab('mgmtAcademic')" id="btnMgmtAcademic" class="mgmt-nav-btn px-4 py-3 rounded-xl text-left text-xs font-bold bg-slate-50 text-slate-700 whitespace-nowrap"><i class="fa-solid fa-graduation-cap w-5"></i> একাডেমিক</button>
+    <button onclick="switchMgmtTab('mgmtAttendance')" id="btnMgmtAttendance" class="mgmt-nav-btn px-4 py-3 rounded-xl text-left text-xs font-bold bg-slate-50 text-slate-700 whitespace-nowrap"><i class="fa-solid fa-calendar-check w-5"></i> উপস্থিতি</button>
+    <button onclick="switchMgmtTab('mgmtFinance')" id="btnMgmtFinance" class="mgmt-nav-btn px-4 py-3 rounded-xl text-left text-xs font-bold bg-slate-50 text-slate-700 whitespace-nowrap"><i class="fa-solid fa-wallet w-5"></i> ফাইন্যান্স</button>
+    <button onclick="switchMgmtTab('mgmtSchedule')" id="btnMgmtSchedule" class="mgmt-nav-btn px-4 py-3 rounded-xl text-left text-xs font-bold bg-slate-50 text-slate-700 whitespace-nowrap"><i class="fa-solid fa-clock w-5"></i> ক্লাস শিডিউল</button>
+    <button onclick="switchMgmtTab('mgmtExams')" id="btnMgmtExams" class="mgmt-nav-btn px-4 py-3 rounded-xl text-left text-xs font-bold bg-slate-50 text-slate-700 whitespace-nowrap"><i class="fa-solid fa-file-pen w-5"></i> পরীক্ষা / ফলাফল</button>
+    <button onclick="switchMgmtTab('mgmtReports')" id="btnMgmtReports" class="mgmt-nav-btn px-4 py-3 rounded-xl text-left text-xs font-bold bg-slate-50 text-slate-700 whitespace-nowrap"><i class="fa-solid fa-chart-column w-5"></i> রিপোর্ট</button>
+    <button onclick="switchMgmtTab('mgmtPortals')" id="btnMgmtPortals" class="mgmt-nav-btn px-4 py-3 rounded-xl text-left text-xs font-bold bg-slate-50 text-slate-700 whitespace-nowrap"><i class="fa-solid fa-users-viewfinder w-5"></i> পোর্টাল</button>
+    <button onclick="switchMgmtTab('mgmtSettings')" id="btnMgmtSettings" class="mgmt-nav-btn px-4 py-3 rounded-xl text-left text-xs font-bold bg-slate-50 text-slate-700 whitespace-nowrap"><i class="fa-solid fa-shield-halved w-5"></i> রোল / অডিট</button>
+  `);
+
+  main.insertAdjacentHTML('beforeend', `
+    <section id="mgmtAcademic" class="mgmt-tab-content hidden space-y-5">
+      <div><h3 class="text-xl font-extrabold text-slate-900">একাডেমিক কন্ট্রোল</h3><p class="text-xs text-slate-500">শিক্ষার্থীর কোর্স, অগ্রগতি, শিক্ষক ও একাডেমিক স্ট্যাটাস পরিচালনা করুন।</p></div>
+      <div id="academicKpis" class="grid grid-cols-2 xl:grid-cols-4 gap-3"></div>
+      <div class="pro-mgmt-card p-5 overflow-x-auto"><div class="flex justify-between items-center mb-4"><h4 class="font-extrabold text-sm">শিক্ষার্থীর একাডেমিক প্রোফাইল</h4><input id="academicSearch" oninput="renderProAcademic()" class="pro-input max-w-xs" placeholder="নাম / কোর্স / ফোন খুঁজুন"></div><table class="pro-table min-w-[850px]"><thead><tr><th>শিক্ষার্থী</th><th>কোর্স</th><th>শিক্ষক</th><th>অগ্রগতি</th><th>স্ট্যাটাস</th><th>নোট</th></tr></thead><tbody id="academicTable"></tbody></table></div>
+    </section>
+
+    <section id="mgmtAttendance" class="mgmt-tab-content hidden space-y-5">
+      <div><h3 class="text-xl font-extrabold text-slate-900">Attendance Management</h3><p class="text-xs text-slate-500">দৈনিক উপস্থিতি সংরক্ষণ ও শিক্ষার্থীর উপস্থিতির হার দেখুন।</p></div>
+      <div class="pro-mgmt-card p-5"><div class="grid grid-cols-1 md:grid-cols-4 gap-3"><input id="attDate" type="date" class="pro-input"><select id="attStudent" class="pro-input"></select><select id="attStatus" class="pro-input"><option value="present">উপস্থিত</option><option value="absent">অনুপস্থিত</option><option value="late">দেরিতে</option><option value="leave">ছুটি</option></select><button onclick="saveProAttendance()" class="bg-emerald-800 text-white rounded-xl font-bold text-xs">উপস্থিতি সেভ</button></div></div>
+      <div class="pro-mgmt-card p-5 overflow-x-auto"><table class="pro-table min-w-[720px]"><thead><tr><th>তারিখ</th><th>শিক্ষার্থী</th><th>কোর্স</th><th>স্ট্যাটাস</th><th>রেকর্ড</th></tr></thead><tbody id="attendanceTable"></tbody></table></div>
+    </section>
+
+    <section id="mgmtFinance" class="mgmt-tab-content hidden space-y-5">
+      <div><h3 class="text-xl font-extrabold text-slate-900">Finance & Fee Management</h3><p class="text-xs text-slate-500">ফি, পেমেন্ট, বকেয়া ও আয়-ব্যয়ের হিসাব এক জায়গায়।</p></div>
+      <div id="financeKpis" class="grid grid-cols-2 xl:grid-cols-4 gap-3"></div>
+      <div class="pro-mgmt-card p-5"><h4 class="font-extrabold text-sm mb-4">নতুন পেমেন্ট রেকর্ড</h4><div class="grid grid-cols-1 md:grid-cols-5 gap-3"><select id="payStudent" class="pro-input"></select><input id="payAmount" type="number" min="0" class="pro-input" placeholder="টাকার পরিমাণ"><select id="payType" class="pro-input"><option>মাসিক ফি</option><option>ভর্তি ফি</option><option>অন্যান্য</option></select><input id="payDate" type="date" class="pro-input"><button onclick="saveProPayment()" class="bg-emerald-800 text-white rounded-xl font-bold text-xs">পেমেন্ট সেভ</button></div></div>
+      <div class="pro-mgmt-card p-5 overflow-x-auto"><table class="pro-table min-w-[760px]"><thead><tr><th>তারিখ</th><th>শিক্ষার্থী</th><th>ধরন</th><th>পরিমাণ</th><th>রসিদ</th></tr></thead><tbody id="paymentTable"></tbody></table></div>
+    </section>
+
+    <section id="mgmtSchedule" class="mgmt-tab-content hidden space-y-5">
+      <div><h3 class="text-xl font-extrabold text-slate-900">Class Schedule</h3><p class="text-xs text-slate-500">ব্যাচ, শিক্ষক ও শিক্ষার্থীর জন্য ক্লাসের সময়সূচি।</p></div>
+      <div class="pro-mgmt-card p-5"><div class="grid grid-cols-1 md:grid-cols-6 gap-3"><input id="schDate" type="date" class="pro-input"><input id="schTime" type="time" class="pro-input"><input id="schTitle" class="pro-input" placeholder="ক্লাস / বিষয়"><select id="schTeacher" class="pro-input"></select><select id="schCourse" class="pro-input"></select><button onclick="saveProSchedule()" class="bg-emerald-800 text-white rounded-xl font-bold text-xs">শিডিউল যোগ</button></div></div>
+      <div id="scheduleList" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3"></div>
+    </section>
+
+    <section id="mgmtExams" class="mgmt-tab-content hidden space-y-5">
+      <div><h3 class="text-xl font-extrabold text-slate-900">Exam & Result Management</h3><p class="text-xs text-slate-500">পরীক্ষার ফলাফল ও শিক্ষার্থীর অগ্রগতি সংরক্ষণ করুন।</p></div>
+      <div class="pro-mgmt-card p-5"><div class="grid grid-cols-1 md:grid-cols-6 gap-3"><select id="examStudent" class="pro-input"></select><input id="examName" class="pro-input" placeholder="পরীক্ষার নাম"><input id="examMarks" type="number" min="0" max="100" class="pro-input" placeholder="নম্বর / 100"><input id="examDate" type="date" class="pro-input"><input id="examNote" class="pro-input" placeholder="শিক্ষকের মন্তব্য"><button onclick="saveProExam()" class="bg-emerald-800 text-white rounded-xl font-bold text-xs">ফলাফল সেভ</button></div></div>
+      <div class="pro-mgmt-card p-5 overflow-x-auto"><table class="pro-table min-w-[820px]"><thead><tr><th>তারিখ</th><th>শিক্ষার্থী</th><th>পরীক্ষা</th><th>নম্বর</th><th>গ্রেড</th><th>মন্তব্য</th></tr></thead><tbody id="examTable"></tbody></table></div>
+    </section>
+
+    <section id="mgmtReports" class="mgmt-tab-content hidden space-y-5">
+      <div class="flex flex-col sm:flex-row justify-between gap-3"><div><h3 class="text-xl font-extrabold text-slate-900">Reports & Analytics</h3><p class="text-xs text-slate-500">একাডেমির বর্তমান ডাটা থেকে সারসংক্ষেপ ও রিপোর্ট।</p></div><button onclick="exportProReport()" class="px-4 py-2.5 bg-emerald-800 text-white rounded-xl text-xs font-bold"><i class="fa-solid fa-download mr-1"></i> রিপোর্ট Export</button></div>
+      <div id="reportGrid" class="grid grid-cols-2 xl:grid-cols-4 gap-3"></div>
+      <div class="pro-mgmt-card p-5"><h4 class="font-extrabold text-sm mb-3">Management Health</h4><div id="reportHealth" class="space-y-2 text-xs"></div></div>
+    </section>
+
+    <section id="mgmtPortals" class="mgmt-tab-content hidden space-y-5">
+      <div><h3 class="text-xl font-extrabold text-slate-900">Teacher & Guardian Portal</h3><p class="text-xs text-slate-500">পরবর্তী ধাপে আলাদা Login Portal তৈরির জন্য প্রস্তুত কাঠামো।</p></div>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div class="portal-preview"><div class="flex items-center gap-3 mb-4"><div class="w-11 h-11 rounded-2xl bg-emerald-800 text-white flex items-center justify-center"><i class="fa-solid fa-user-shield"></i></div><div><b class="text-sm">Guardian Portal</b><p class="text-[11px] text-slate-500">সন্তানের অগ্রগতি ও ফি</p></div></div><div class="grid grid-cols-2 gap-2 text-xs"><div class="bg-white rounded-xl p-3">Attendance<br><b id="portalAtt">0%</b></div><div class="bg-white rounded-xl p-3">Pending Fee<br><b id="portalDue">৳0</b></div><div class="bg-white rounded-xl p-3">Upcoming Class<br><b>শিডিউল</b></div><div class="bg-white rounded-xl p-3">Result<br><b>সর্বশেষ ফল</b></div></div></div>
+        <div class="portal-preview"><div class="flex items-center gap-3 mb-4"><div class="w-11 h-11 rounded-2xl bg-indigo-700 text-white flex items-center justify-center"><i class="fa-solid fa-chalkboard-user"></i></div><div><b class="text-sm">Teacher Portal</b><p class="text-[11px] text-slate-500">ক্লাস, উপস্থিতি ও রিপোর্ট</p></div></div><ul class="text-xs space-y-2"><li>✓ Assigned Students</li><li>✓ Today's Classes</li><li>✓ Attendance Entry</li><li>✓ Homework / Feedback</li><li>✓ Exam & Result Entry</li></ul></div>
+      </div>
+      <div class="pro-mgmt-card p-5"><h4 class="font-extrabold text-sm mb-3">Portal Access</h4><div class="grid grid-cols-1 md:grid-cols-3 gap-3"><div class="p-4 rounded-2xl bg-slate-50"><b class="text-xs">Admin</b><p class="text-[10px] text-slate-500 mt-1">Full control</p></div><div class="p-4 rounded-2xl bg-slate-50"><b class="text-xs">Teacher</b><p class="text-[10px] text-slate-500 mt-1">Academic only</p></div><div class="p-4 rounded-2xl bg-slate-50"><b class="text-xs">Guardian / Student</b><p class="text-[10px] text-slate-500 mt-1">Own records only</p></div></div></div>
+    </section>
+
+    <section id="mgmtSettings" class="mgmt-tab-content hidden space-y-5">
+      <div><h3 class="text-xl font-extrabold text-slate-900">Roles, Permissions & Audit</h3><p class="text-xs text-slate-500">কে কোন অংশ ব্যবহার করতে পারবে এবং কে কী পরিবর্তন করেছে তার রেকর্ড।</p></div>
+      <div class="pro-mgmt-card p-5"><div class="grid grid-cols-1 md:grid-cols-4 gap-3"><div class="p-4 rounded-2xl bg-emerald-50"><b class="text-xs">Super Admin</b><p class="text-[10px] text-slate-600 mt-1">সব মডিউল</p></div><div class="p-4 rounded-2xl bg-indigo-50"><b class="text-xs">Academic Manager</b><p class="text-[10px] text-slate-600 mt-1">Student / Teacher / Result</p></div><div class="p-4 rounded-2xl bg-amber-50"><b class="text-xs">Accountant</b><p class="text-[10px] text-slate-600 mt-1">Finance / Payments</p></div><div class="p-4 rounded-2xl bg-purple-50"><b class="text-xs">Content Editor</b><p class="text-[10px] text-slate-600 mt-1">Visitor Website</p></div></div></div>
+      <div class="pro-mgmt-card p-5 overflow-x-auto"><h4 class="font-extrabold text-sm mb-3">Audit Log</h4><table class="pro-table min-w-[700px]"><thead><tr><th>সময়</th><th>অ্যাকশন</th><th>বিবরণ</th></tr></thead><tbody id="auditTable"></tbody></table></div>
+    </section>
+  `);
+
+  window.proData={
+    attendance:JSON.parse(localStorage.getItem('m_attendance')||'[]'),
+    payments:JSON.parse(localStorage.getItem('m_payments')||'[]'),
+    schedules:JSON.parse(localStorage.getItem('m_schedules')||'[]'),
+    exams:JSON.parse(localStorage.getItem('m_exams')||'[]'),
+    progress:JSON.parse(localStorage.getItem('m_progress')||'{}'),
+    fees:JSON.parse(localStorage.getItem('m_fees')||'{}'),
+    audit:JSON.parse(localStorage.getItem('m_audit')||'[]')
+  };
+  function today(){return new Date().toISOString().slice(0,10)}
+  function esc(v){return mgmtEscape(v)}
+  function save(k,v){proData[k]=v;localStorage.setItem('m_'+k,JSON.stringify(v))}
+  function studentKey(s,i){return s.id||s.phone||('student-'+i)}
+  function students(){return Array.isArray(window.mgmtApprovedStudents)?window.mgmtApprovedStudents:[]}
+  function teacherName(t){return t?.name||t?.title||t?.teacherName||'নির্ধারিত নয়'}
+  function courseName(c){return c?.title||c?.name||c?.courseName||String(c||'')}
+  function audit(action,detail){proData.audit.unshift({time:new Date().toISOString(),action,detail});proData.audit=proData.audit.slice(0,200);save('audit',proData.audit)}
+  function fillSelect(id,items,placeholder){const el=document.getElementById(id);if(!el)return;const old=el.value;el.innerHTML=(placeholder?`<option value="">${placeholder}</option>`:'')+items.map((x,i)=>`<option value="${esc(x.value)}">${esc(x.label)}</option>`).join('');if(old)el.value=old}
+  function studentOptions(){return students().map((s,i)=>({value:studentKey(s,i),label:`${s.name||'নাম নেই'} • ${s.course||'কোর্স নেই'}`}))}
+  function getStudentByKey(k){const arr=students();return arr.find((s,i)=>studentKey(s,i)===k)}
+  function populateProSelects(){
+    fillSelect('attStudent',studentOptions(),'শিক্ষার্থী নির্বাচন করুন');fillSelect('payStudent',studentOptions(),'শিক্ষার্থী নির্বাচন করুন');fillSelect('examStudent',studentOptions(),'শিক্ষার্থী নির্বাচন করুন');
+    fillSelect('schTeacher',(Array.isArray(window.siteTeachers)?window.siteTeachers:[]).map((t,i)=>({value:String(i),label:teacherName(t)})),'শিক্ষক নির্বাচন করুন');
+    fillSelect('schCourse',(Array.isArray(window.siteCourses)?window.siteCourses:[]).map((c,i)=>({value:String(i),label:courseName(c)})),'কোর্স নির্বাচন করুন');
+    ['attDate','payDate','examDate','schDate'].forEach(id=>{const e=document.getElementById(id);if(e&&!e.value)e.value=today()});
+  }
+  window.renderProAcademic=function(){const st=students();const q=(document.getElementById('academicSearch')?.value||'').toLowerCase();const rows=st.filter(s=>`${s.name} ${s.phone} ${s.course}`.toLowerCase().includes(q));
+    document.getElementById('academicKpis').innerHTML=[['শিক্ষার্থী',st.length],['সক্রিয়',st.filter(s=>s.status!=='completed').length],['সম্পন্ন',st.filter(s=>s.status==='completed').length],['কোর্স',new Set(st.map(s=>s.course)).size]].map(x=>`<div class="pro-kpi"><div class="num">${x[1]}</div><div class="lbl">${x[0]}</div></div>`).join('');
+    document.getElementById('academicTable').innerHTML=rows.length?rows.map((s,i)=>{const k=studentKey(s,students().indexOf(s));const p=proData.progress[k]||{progress:0,teacher:'',note:''};return `<tr><td><b>${esc(s.name)}</b><div class="text-[10px] text-slate-400">${esc(s.phone||'')}</div></td><td>${esc(s.course||'')}</td><td>${esc(p.teacher||'নির্ধারিত নয়')}</td><td><div class="w-32 h-2 bg-slate-100 rounded-full overflow-hidden"><div style="width:${Math.max(0,Math.min(100,Number(p.progress)||0))}%" class="h-full bg-emerald-600"></div></div><span class="text-[10px]">${Number(p.progress)||0}%</span></td><td><span class="pro-chip ${s.status==='completed'?'bg-rose-50 text-rose-700':'bg-emerald-50 text-emerald-700'}">${s.status==='completed'?'সম্পন্ন':'সক্রিয়'}</span></td><td>${esc(p.note||'')}</td></tr>`}).join(''):'<tr><td colspan="6" class="p-8 text-center text-slate-400">কোনো শিক্ষার্থী নেই।</td></tr>';
+  }
+  window.saveProAttendance=function(){const sid=document.getElementById('attStudent').value,date=document.getElementById('attDate').value||today(),status=document.getElementById('attStatus').value,s=getStudentByKey(sid);if(!sid||!s)return alert('শিক্ষার্থী নির্বাচন করুন।');const idx=proData.attendance.findIndex(x=>x.studentKey===sid&&x.date===date);const row={studentKey:sid,date,status,name:s.name,course:s.course||''};if(idx>=0)proData.attendance[idx]=row;else proData.attendance.unshift(row);save('attendance',proData.attendance);audit('Attendance',`${s.name} • ${status} • ${date}`);renderProAttendance();showToast('উপস্থিতি সংরক্ষণ হয়েছে।')}
+  window.renderProAttendance=function(){const rows=proData.attendance.slice(0,100);document.getElementById('attendanceTable').innerHTML=rows.length?rows.map(x=>`<tr><td>${esc(x.date)}</td><td><b>${esc(x.name)}</b></td><td>${esc(x.course)}</td><td><span class="pro-chip ${x.status==='present'?'bg-emerald-50 text-emerald-700':x.status==='absent'?'bg-rose-50 text-rose-700':'bg-amber-50 text-amber-700'}">${x.status==='present'?'উপস্থিত':x.status==='absent'?'অনুপস্থিত':x.status==='late'?'দেরিতে':'ছুটি'}</span></td><td class="text-slate-400">রেকর্ডেড</td></tr>`).join(''):'<tr><td colspan="5" class="p-8 text-center text-slate-400">এখনও কোনো উপস্থিতি রেকর্ড নেই।</td></tr>'}
+  window.saveProPayment=function(){const sid=document.getElementById('payStudent').value,amount=Number(document.getElementById('payAmount').value||0),type=document.getElementById('payType').value,date=document.getElementById('payDate').value||today(),s=getStudentByKey(sid);if(!sid||!s||amount<=0)return alert('শিক্ষার্থী ও সঠিক টাকার পরিমাণ দিন।');const receipt='RC-'+Date.now().toString().slice(-8);proData.payments.unshift({studentKey:sid,name:s.name,amount,type,date,receipt});save('payments',proData.payments);audit('Payment',`${s.name} • ৳${amount} • ${type}`);document.getElementById('payAmount').value='';renderProFinance();showToast('পেমেন্ট রেকর্ড হয়েছে।')}
+  window.renderProFinance=function(){const total=proData.payments.reduce((a,x)=>a+Number(x.amount||0),0),due=students().reduce((sum,s,i)=>{const k=studentKey(s,i),fee=Number(proData.fees[k]||0),paid=proData.payments.filter(p=>p.studentKey===k&&p.type==='মাসিক ফি').reduce((a,x)=>a+Number(x.amount||0),0);return sum+Math.max(0,fee-paid)},0);document.getElementById('financeKpis').innerHTML=[['মোট সংগ্রহ',`৳${total.toLocaleString('bn-BD')}`],['আনুমানিক বকেয়া',`৳${due.toLocaleString('bn-BD')}`],['পেমেন্ট',proData.payments.length],['শিক্ষার্থী',students().length]].map(x=>`<div class="pro-kpi"><div class="num text-[1.25rem]">${x[1]}</div><div class="lbl">${x[0]}</div></div>`).join('');document.getElementById('paymentTable').innerHTML=proData.payments.length?proData.payments.slice(0,100).map(x=>`<tr><td>${esc(x.date)}</td><td><b>${esc(x.name)}</b></td><td>${esc(x.type)}</td><td class="font-extrabold text-emerald-800">৳${Number(x.amount).toLocaleString('bn-BD')}</td><td class="text-slate-400">${esc(x.receipt)}</td></tr>`).join(''):'<tr><td colspan="5" class="p-8 text-center text-slate-400">কোনো পেমেন্ট নেই।</td></tr>'}
+  window.saveProSchedule=function(){const date=document.getElementById('schDate').value||today(),time=document.getElementById('schTime').value,title=document.getElementById('schTitle').value.trim(),ti=document.getElementById('schTeacher').value,ci=document.getElementById('schCourse').value;if(!title||!time)return alert('ক্লাসের নাম ও সময় দিন।');const t=window.siteTeachers?.[Number(ti)],c=window.siteCourses?.[Number(ci)];proData.schedules.unshift({date,time,title,teacher:teacherName(t),course:courseName(c)});save('schedules',proData.schedules);audit('Schedule',`${title} • ${date} ${time}`);document.getElementById('schTitle').value='';renderProSchedule();showToast('ক্লাস শিডিউল যোগ হয়েছে।')}
+  window.renderProSchedule=function(){document.getElementById('scheduleList').innerHTML=proData.schedules.length?proData.schedules.slice(0,60).map((x,i)=>`<div class="pro-mgmt-card p-4"><div class="flex justify-between gap-2"><span class="pro-chip bg-emerald-50 text-emerald-700">${esc(x.date)}</span><b class="text-sm text-slate-800">${esc(x.time)}</b></div><h4 class="font-extrabold text-sm mt-3">${esc(x.title)}</h4><p class="text-[11px] text-slate-500 mt-1">${esc(x.course||'')} • ${esc(x.teacher||'')}</p><button onclick="deleteProSchedule(${i})" class="text-[10px] text-rose-600 font-bold mt-3">মুছে দিন</button></div>`).join(''):'<div class="col-span-full p-10 text-center text-slate-400 border border-dashed rounded-2xl">কোনো ক্লাস শিডিউল নেই।</div>'}
+  window.deleteProSchedule=function(i){proData.schedules.splice(i,1);save('schedules',proData.schedules);audit('Schedule Delete','একটি শিডিউল মুছে ফেলা হয়েছে');renderProSchedule()}
+  function grade(n){n=Number(n);return n>=80?'A+':n>=70?'A':n>=60?'A-':n>=50?'B':n>=40?'C':n>=33?'D':'F'}
+  window.saveProExam=function(){const sid=document.getElementById('examStudent').value,s=getStudentByKey(sid),name=document.getElementById('examName').value.trim(),marks=Number(document.getElementById('examMarks').value),date=document.getElementById('examDate').value||today(),note=document.getElementById('examNote').value.trim();if(!s||!name||isNaN(marks))return alert('শিক্ষার্থী, পরীক্ষার নাম ও নম্বর দিন।');proData.exams.unshift({studentKey:sid,name:s.name,exam:name,marks,date,note,grade:grade(marks)});save('exams',proData.exams);audit('Result',`${s.name} • ${name} • ${marks}`);document.getElementById('examName').value='';document.getElementById('examMarks').value='';document.getElementById('examNote').value='';renderProExams();showToast('ফলাফল সংরক্ষণ হয়েছে।')}
+  window.renderProExams=function(){document.getElementById('examTable').innerHTML=proData.exams.length?proData.exams.slice(0,100).map(x=>`<tr><td>${esc(x.date)}</td><td><b>${esc(x.name)}</b></td><td>${esc(x.exam)}</td><td class="font-extrabold">${x.marks}/100</td><td><span class="pro-chip bg-indigo-50 text-indigo-700">${esc(x.grade)}</span></td><td>${esc(x.note||'')}</td></tr>`).join(''):'<tr><td colspan="6" class="p-8 text-center text-slate-400">কোনো ফলাফল নেই।</td></tr>'}
+  window.renderProReports=function(){const st=students(),present=proData.attendance.filter(x=>x.status==='present').length,absent=proData.attendance.filter(x=>x.status==='absent').length,totalAtt=present+absent+proData.attendance.filter(x=>x.status==='late').length;document.getElementById('reportGrid').innerHTML=[['মোট শিক্ষার্থী',st.length],['Attendance Rate',totalAtt?Math.round((present/totalAtt)*100)+'%':'0%'],['মোট পেমেন্ট',`৳${proData.payments.reduce((a,x)=>a+Number(x.amount||0),0).toLocaleString('bn-BD')}`],['মোট ফলাফল',proData.exams.length]].map(x=>`<div class="pro-kpi"><div class="num text-[1.25rem]">${x[1]}</div><div class="lbl">${x[0]}</div></div>`).join('');document.getElementById('reportHealth').innerHTML=[['Student Database',st.length?'Ready':'No student data'],['Attendance',proData.attendance.length?'Active':'Not started'],['Finance',proData.payments.length?'Active':'Not started'],['Class Schedule',proData.schedules.length?'Active':'Not started'],['Exam / Result',proData.exams.length?'Active':'Not started']].map(x=>`<div class="flex justify-between p-3 rounded-xl bg-slate-50"><span>${x[0]}</span><b class="${x[1]==='Ready'||x[1]==='Active'?'text-emerald-700':'text-slate-400'}">${x[1]}</b></div>`).join('')}
+  window.renderProPortals=function(){const total=proData.attendance.length,p=proData.attendance.filter(x=>x.status==='present').length;document.getElementById('portalAtt').innerText=total?Math.round(p/total*100)+'%':'0%';document.getElementById('portalDue').innerText='৳0'}
+  window.renderProAudit=function(){document.getElementById('auditTable').innerHTML=proData.audit.length?proData.audit.slice(0,100).map(x=>`<tr><td>${new Date(x.time).toLocaleString('bn-BD')}</td><td><span class="pro-chip bg-slate-100 text-slate-700">${esc(x.action)}</span></td><td>${esc(x.detail)}</td></tr>`).join(''):'<tr><td colspan="3" class="p-8 text-center text-slate-400">এখনও কোনো audit log নেই।</td></tr>'}
+  window.exportProReport=function(){const payload={generatedAt:new Date().toISOString(),students:students(),attendance:proData.attendance,payments:proData.payments,schedules:proData.schedules,exams:proData.exams};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='madina-academy-report-'+today()+'.json';a.click();URL.revokeObjectURL(url);audit('Report Export','Academy report exported');showToast('রিপোর্ট Export হয়েছে।')}
+
+  const oldSwitch=window.switchMgmtTab;
+  window.switchMgmtTab=function(tabId){oldSwitch(tabId);populateProSelects();if(tabId==='mgmtAcademic')renderProAcademic();if(tabId==='mgmtAttendance')renderProAttendance();if(tabId==='mgmtFinance')renderProFinance();if(tabId==='mgmtSchedule')renderProSchedule();if(tabId==='mgmtExams')renderProExams();if(tabId==='mgmtReports')renderProReports();if(tabId==='mgmtPortals')renderProPortals();if(tabId==='mgmtSettings')renderProAudit()};
+  const oldOpen=window.openManagementSoftware;
+  window.openManagementSoftware=function(){oldOpen();setTimeout(()=>{populateProSelects();renderProAcademic();renderProAttendance();renderProFinance();renderProSchedule();renderProExams();renderProReports();renderProPortals();renderProAudit()},50)};
+  const oldApprove=window.approveMgmtTrial;
+  window.approveMgmtTrial=function(idx){oldApprove(idx);audit('Trial Approved','একটি ট্রায়াল আবেদন স্টুডেন্ট হিসেবে অনুমোদিত হয়েছে')};
+  const oldManual=window.saveManualStudentData;
+  window.saveManualStudentData=function(){oldManual();setTimeout(()=>{audit('Student Added','ম্যানুয়ালি নতুন শিক্ষার্থী যুক্ত হয়েছে');populateProSelects();renderProAcademic()},30)};
+})();
+</script>
 </body>
 </html>
